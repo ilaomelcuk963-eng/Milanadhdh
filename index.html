@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Millie's Reborn Nursery</title>
+    <link rel="shortcut icon" href="https://placehold.co/32x32/FFB6C1/5A2D4E?text=M" type="image/x-icon">
+    <style>
+        :root { --main-bg: #ffe6f2; --text-color: #5a2d4e; --primary: #ff66a3; --primary-dark: #cc0066; --accent: #ff99cc; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { background-color: var(--main-bg); color: var(--text-color); overflow-x: hidden; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .nav-toggle { position: fixed; top: 20px; right: 20px; z-index: 1000; cursor: pointer; background-color: var(--primary); border-radius: 50%; width: 50px; height: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .nav-toggle span { display: block; width: 20px; height: 2px; background-color: white; margin: 2px 0; }
+        .navigation { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background-color: rgba(255, 153, 204, 0.95); z-index: 999; transition: right 0.5s ease; padding: 80px 20px 20px; }
+        .navigation.active { right: 0; }
+        .navigation ul { list-style: none; }
+        .navigation a { color: var(--text-color); text-decoration: none; font-size: 18px; display: block; padding: 10px 15px; border-radius: 5px; transition: all 0.3s ease; }
+        .navigation a:hover { background-color: var(--accent); color: white; transform: translateX(5px); }
+        .content { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        section { display: none; padding: 40px 20px; animation: fadeIn 0.8s ease; }
+        section.active { display: block; }
+        h1, h2, h3 { color: var(--primary-dark); margin-bottom: 20px; text-align: center; animation: slideIn 0.8s ease; }
+        p { line-height: 1.6; margin-bottom: 15px; text-align: center; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .photo-frame { background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+        .photo-frame:hover { transform: translateY(-5px); }
+        .photo-frame img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+        form { max-width: 600px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: var(--primary-dark); font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 10px 15px; border: 1px solid var(--accent); border-radius: 5px; font-size: 16px; }
+        button { background-color: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-size: 16px; transition: all 0.3s ease; display: block; margin: 0 auto; }
+        button:hover { background-color: var(--primary-dark); transform: scale(1.05); }
+        .admin-panel { background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 20px; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .admin-table th, .admin-table td { border: 1px solid var(--accent); padding: 10px; text-align: left; word-break: break-word; }
+        .admin-table th { background-color: var(--accent); color: white; }
+        #comments-section { background: linear-gradient(135deg, #fff5f9 0%, #ffe6f2 100%); border-radius: 15px; }
+        .notification { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 15px 25px; border-radius: 10px; color: white; font-weight: bold; z-index: 10000; animation: slideIn 0.5s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .notification.success { background: #4CAF50; }
+        .notification.error { background: #f44336; }
+        .notification.info { background: #2196F3; }
+        footer { background-color: var(--accent); color: white; padding: 20px; text-align: center; margin-top: 50px; }
+        .social-links a { color: white; margin: 0 10px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    <nav class="navigation" id="navigation">
+        <ul>
+            <li><a href="#" data-section="home">Главная</a></li>
+            <li><a href="#" data-section="about">О нас</a></li>
+            <li><a href="#" data-section="gallery">Галерея</a></li>
+            <li><a href="#" data-section="comments-section">Отзывы</a></li>
+            <li><a href="#" data-section="admin">Админ-панель</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section id="home" class="active">
+            <h1>Millie's Reborn Nursery</h1>
+            <p>Создаем уникальные куклы ручной работы, которые станут любимыми игрушками ваших детей.</p>
+        </section>
+
+        <section id="about">
+            <h2>О нас</h2>
+            <p>Мы - команда мастеров, создающих уникальные куклы на заказ.</p>
+        </section>
+
+        <section id="gallery">
+            <h2>Галерея кукол</h2>
+            <div class="gallery">
+                <div class="photo-frame"><img src="https://placehold.co/400x300/FFB6C1/5A2D4E?text=Кукла+1" alt="Фото 1"></div>
+                <div class="photo-frame"><img src="https://placehold.co/400x300/FFB6C1/5A2D4E?text=Кукла+2" alt="Фото 2"></div>
+                <div class="photo-frame"><img src="https://placehold.co/400x300/FFB6C1/5A2D4E?text=Кукла+3" alt="Фото 3"></div>
+            </div>
+        </section>
+
+        <section id="comments-section">
+            <h2>💬 Отзывы клиентов</h2>
+            <div style="max-width: 800px; margin: 0 auto 50px; background: white; padding: 30px; border-radius: 15px;">
+                <h3>Оставьте ваш отзыв</h3>
+                <form id="commentsForm">
+                    <div class="form-group"><label for="commentName">Ваше имя:</label><input type="text" id="commentName" required></div>
+                    <div class="form-group"><label for="commentText">Ваш отзыв:</label><textarea id="commentText" rows="4" required></textarea></div>
+                    <div class="form-group"><label for="commentRating">Оценка:</label>
+                        <select id="commentRating" required>
+                            <option value="5">★★★★★ Отлично</option><option value="4">★★★★☆ Хорошо</option><option value="3">★★★☆☆ Нормально</option>
+                        </select>
+                    </div>
+                    <button type="submit">Опубликовать отзыв</button>
+                </form>
+            </div>
+            <div id="commentsList" style="display: grid; gap: 20px;"></div>
+        </section>
+
+        <section id="admin">
+            <h2>Админ-панель</h2>
+            <div id="adminLogin">
+                <div class="form-group"><label>Пароль:</label><input type="password" id="adminPassword" required></div>
+                <button id="loginBtn">Войти</button>
+            </div>
+            
+            <div id="adminPanel" class="admin-panel" style="display: none;">
+                <button id="logoutBtn" style="background: #f44336; float: right;">Выйти</button>
+                <h3>Управление комментариями</h3>
+                <div id="commentsAdminList" style="overflow-x: auto;"></div>
+
+                <h3 style="margin-top: 30px;">Отправить уведомление</h3>
+                <form id="messageForm">
+                    <div class="form-group"><label for="recipientId">ID получателя (оставьте пустым для всех):</label><input type="text" id="recipientId" placeholder="Например, user-a1b2c3d4"></div>
+                    <div class="form-group"><label for="messageText">Текст сообщения:</label><textarea id="messageText" rows="3" required></textarea></div>
+                    <button type="submit">Отправить</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Телефон: +380977057272 | Украина</p>
+        <div class="social-links"><a href="#">Instagram</a> <a href="#">TikTok</a> <a href="#">Telegram</a></div>
+        <div id="userIdFooter" style="margin-top: 10px; font-size: 12px; color: #fce4ec;"></div>
+    </footer>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:5000/api'; // Адрес вашего локального сервера
+        let isAdminLoggedIn = false;
+        let currentUserId = '';
+
+        // --- Инициализация ---
+        document.addEventListener('DOMContentLoaded', () => {
+            setupNavigation();
+            setupUserId();
+            loadData();
+            
+            document.getElementById('commentsForm').addEventListener('submit', handleAddComment);
+            document.getElementById('loginBtn').addEventListener('click', handleAdminLogin);
+            document.getElementById('logoutBtn').addEventListener('click', handleAdminLogout);
+            document.getElementById('messageForm').addEventListener('submit', handleSendMessage);
+
+            // Проверка сообщений для пользователя каждые 15 секунд
+            setInterval(checkForMessages, 15000);
+        });
+
+        // --- Навигация ---
+        function setupNavigation() {
+            const navToggle = document.getElementById('navToggle');
+            const navigation = document.getElementById('navigation');
+            navToggle.addEventListener('click', () => navigation.classList.toggle('active'));
+            document.querySelectorAll('.navigation a').forEach(link => {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const sectionId = link.getAttribute('data-section');
+                    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+                    document.getElementById(sectionId)?.classList.add('active');
+                    navigation.classList.remove('active');
+                    if (sectionId === 'admin') checkAdminAuth();
+                });
+            });
+        }
+        
+        // --- ID Пользователя ---
+        function setupUserId() {
+            let userId = localStorage.getItem('dollShopUserId');
+            if (!userId) {
+                userId = `user-${Math.random().toString(36).substr(2, 8)}`;
+                localStorage.setItem('dollShopUserId', userId);
+            }
+            currentUserId = userId;
+            document.getElementById('userIdFooter').textContent = `Ваш ID: ${currentUserId}`;
+        }
+
+        // --- Работа с данными (API) ---
+        async function loadData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/data`);
+                if (!response.ok) throw new Error('Ошибка сети при загрузке данных');
+                const data = await response.json();
+                renderComments(data.comments || []);
+                if(isAdminLoggedIn) renderAdminComments(data.comments || []);
+            } catch (error) {
+                console.error("Ошибка загрузки:", error);
+                showNotification('Не удалось загрузить данные', 'error');
+            }
+        }
+
+        async function handleAddComment(e) {
+            e.preventDefault();
+            const newComment = {
+                name: document.getElementById('commentName').value,
+                text: document.getElementById('commentText').value,
+                rating: parseInt(document.getElementById('commentRating').value),
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/comments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newComment)
+                });
+                if (!response.ok) throw new Error('Ошибка сервера');
+                showNotification('✅ Отзыв успешно добавлен!', 'success');
+                e.target.reset();
+                loadData(); // Обновляем список
+            } catch (error) {
+                showNotification('Не удалось добавить отзыв', 'error');
+            }
+        }
+        
+        async function deleteComment(commentId) {
+            if (!confirm('Вы уверены, что хотите удалить этот комментарий?')) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/comments/${commentId}`, {
+                    method: 'DELETE',
+                    headers: { 'Admin-Password': '1488' } // Пароль для безопасности
+                });
+                 if (!response.ok) throw new Error('Ошибка при удалении');
+                showNotification('Комментарий удален', 'success');
+                loadData(); // Обновляем список
+            } catch(error) {
+                showNotification('Ошибка удаления', 'error');
+            }
+        }
+
+        // --- Админ-панель ---
+        function handleAdminLogin() {
+            if (document.getElementById('adminPassword').value === '1488') {
+                isAdminLoggedIn = true;
+                sessionStorage.setItem('isAdminLoggedIn', 'true');
+                checkAdminAuth();
+            } else {
+                showNotification('Неверный пароль', 'error');
+            }
+        }
+
+        function handleAdminLogout() {
+             isAdminLoggedIn = false;
+             sessionStorage.removeItem('isAdminLoggedIn');
+             checkAdminAuth();
+        }
+
+        function checkAdminAuth() {
+            isAdminLoggedIn = sessionStorage.getItem('isAdminLoggedIn') === 'true';
+            document.getElementById('adminLogin').style.display = isAdminLoggedIn ? 'none' : 'block';
+            document.getElementById('adminPanel').style.display = isAdminLoggedIn ? 'block' : 'none';
+            if(isAdminLoggedIn) loadData();
+        }
+        
+        async function handleSendMessage(e) {
+            e.preventDefault();
+            const recipient = document.getElementById('recipientId').value || 'global';
+            const text = document.getElementById('messageText').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/send-message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Admin-Password': '1488' },
+                    body: JSON.stringify({ recipient, text })
+                });
+                if (!response.ok) throw new Error('Ошибка отправки');
+                showNotification('Сообщение отправлено!', 'success');
+                e.target.reset();
+            } catch(error) {
+                showNotification('Не удалось отправить сообщение', 'error');
+            }
+        }
+
+        // --- Уведомления и рендеринг ---
+        function renderComments(comments) {
+            const list = document.getElementById('commentsList');
+            if (!comments || comments.length === 0) {
+                list.innerHTML = '<p>Пока нет отзывов. Станьте первым!</p>';
+                return;
+            }
+            list.innerHTML = comments.map(c => `
+                <div style="background:white; padding:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+                    <div style="display:flex; justify-content:space-between; color:#cc0066; font-weight:bold;">
+                        <span>${c.name}</span><span style="color:#ffcc00;">${'★'.repeat(c.rating)}</span>
+                    </div>
+                    <p style="text-align:left; margin-top:10px;">${c.text}</p>
+                    <small style="color:#999;">${new Date(c.date).toLocaleDateString()}</small>
+                </div>
+            `).join('');
+        }
+        
+        function renderAdminComments(comments) {
+            const container = document.getElementById('commentsAdminList');
+            if (!comments || comments.length === 0) {
+                container.innerHTML = '<p>Комментариев нет.</p>'; return;
+            }
+            const tableRows = comments.map(c => `
+                <tr>
+                    <td>${c.name}</td>
+                    <td>${c.text.substring(0, 50)}...</td>
+                    <td>${'★'.repeat(c.rating)}</td>
+                    <td>${new Date(c.date).toLocaleDateString()}</td>
+                    <td><button onclick="deleteComment('${c.id}')" style="background:#f44336; padding: 5px 10px;">Удалить</button></td>
+                </tr>
+            `).join('');
+            container.innerHTML = `
+                <table class="admin-table">
+                    <thead><tr><th>Имя</th><th>Текст</th><th>Рейтинг</th><th>Дата</th><th>Действие</th></tr></thead>
+                    <tbody>${tableRows}</tbody>
+                </table>`;
+        }
+        
+        async function checkForMessages() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/messages/${currentUserId}`);
+                const messages = await response.json();
+                messages.forEach(msg => {
+                    showNotification(msg.text, 'info');
+                });
+            } catch (error) {
+                // Ошибку не показываем, чтобы не мешать пользователю
+                console.log("Периодическая проверка сообщений не удалась, это нормально при отсутствии новых.");
+            }
+        }
+
+        function showNotification(msg, type) {
+            const n = document.createElement('div');
+            n.className = `notification ${type}`;
+            n.textContent = msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 5000);
+        }
+    </script>
+</body>
+</html>
